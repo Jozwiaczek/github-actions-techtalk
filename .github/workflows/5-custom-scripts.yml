@@ -1,0 +1,41 @@
+name: 'Custom scripts'
+on:
+  pull_request:
+    branches:
+      - master
+
+defaults:
+  run:
+    working-directory: ci-scripts
+
+jobs:
+  Prepare:
+    name: 'Prepare Prod PR'
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - name: 'Git checkout'
+        uses: actions/checkout@v2.4.0
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.5.1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: 'Install dependency'
+        run: yarn install --frozen-lockfile
+
+      - name: 'Build CI scripts'
+        run: yarn build
+
+      - name: 'Prepare PR'
+        uses: actions/github-script@v6.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { prepareProductionPR } = require(`./ci-scripts/build/src`)
+            prepareProductionPR(github, context)

@@ -1,0 +1,68 @@
+name: 'Continuous Integration (With Cache)'
+on: pull_request
+
+jobs:
+  Validate:
+    name: 'Validate Pull Request'
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - name: 'Git checkout'
+        uses: actions/checkout@v2.4.0
+
+      # Beginning of yarn setup, keep in sync between all workflows
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: 'Use cached node_modules'
+        id: cache-modules
+        uses: actions/cache@v2.1.7
+        with:
+          path: 'node_modules'
+          key: ${{ runner.os }}-v${{ matrix.node-version }}-node_modules-${{ hashFiles('yarn.lock', '**/package.json') }}
+
+      - name: 'Find location of global yarn cache'
+        id: yarn-cache
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: 'Cache global yarn cache'
+        uses: actions/cache@v2.1.7
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: 'Install dependency'
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+      # End of yarn setup
+
+      - name: 'Audit dependencies'
+        run: /bin/sh -c 'yarn audit --level high; [[ $? -ge 8 ]] && exit 1 || exit 0'
+
+      - name: 'Run Prettier'
+        run: yarn prettier
+
+      - name: 'Use Eslint Cache Folder'
+        uses: actions/cache@v2.1.7
+        id: eslint-cache-folder
+        with:
+          path: .eslintcache
+          key: ${{ runner.os }}-cache-eslint
+          restore-keys: |
+            ${{ runner.os }}-cache-eslint
+
+      - name: 'Run ESLint'
+        run: yarn lint
+
+      - name: 'Run unit tests'
+        run: yarn test

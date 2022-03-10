@@ -1,7 +1,21 @@
 {
   "name": "github-actions",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.js",
   "author": "Jakub Jóźwiak <kubencki@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint \"**/*.{js,json,md}\" --cache",
+    "lint:fix": "yarn lint --fix",
+    "prettier": "prettier --check .",
+    "prettier:fix": "prettier --write ."
+  },
+  "devDependencies": {
+    "eslint": "^8.10.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4",
+    "jest": "^27.5.1",
+    "prettier": "^2.5.1"
+  }
 }

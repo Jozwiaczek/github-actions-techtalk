@@ -1,0 +1,29 @@
+name: 'Continuous Integration (With Cache)'
+on: pull_request
+
+jobs:
+  Validate:
+    name: 'Validate Pull Request'
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2.4.0
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - run: yarn install --frozen-lockfile
+
+      - name: 'Audit dependencies'
+        run: /bin/sh -c 'yarn audit --level high; [[ $? -ge 8 ]] && exit 1 || exit 0'
+
+      - name: 'Run Prettier'
+        run: yarn prettier
+
+      - name: 'Run ESLint'
+        run: yarn lint
+
+      - name: 'Run unit tests'
+        run: yarn test

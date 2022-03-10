@@ -1,0 +1,13 @@
+name: 'Cron example'
+on:
+  schedule:
+    - cron: '0 0 * * *' # every day at midnight
+
+jobs:
+  Example-Cron:
+    name: 'Example Cron Workflow'
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "Hello from cron workflow!"
