@@ -5,13 +5,9 @@ module.exports = {
     es2021: true,
     jest: true,
   },
-  extends: [
-    'airbnb-base',
-    'eslint:recommended',
-  ],
+  extends: ['airbnb-base', 'eslint:recommended'],
   parserOptions: {
     ecmaVersion: 'latest',
   },
-  rules: {
-  },
+  rules: {},
 };
