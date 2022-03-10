@@ -1,0 +1,37 @@
+# For all config options check: https://docs.github.com/en/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 10
+    target-branch: "develop"
+    allow:
+      # Allow only production updates for React and any packages starting "react"
+      - dependency-name: "react*"
+        dependency-type: 'production'
+    ignore:
+      # For AWS SDK, ignore all patch updates
+      - dependency-name: "aws-sdk"
+      update-types: [ "version-update:semver-patch" ]
+    # Specify labels for npm pull requests
+    labels:
+      - "npm"
+      - "dependencies"
+    versioning-strategy: increase-if-necessary
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'monthly'
+      day: 'monday'
+      time: "09:00" # UTC time from default
+      # Use Poland Standard Time
+      timezone: "Poland"
+    open-pull-requests-limit: 10
+    reviewers:
+      - 'Jozwiaczek'
+    assignees:
+      - 'Jozwiaczek'
