@@ -7,19 +7,19 @@ updates:
     schedule:
       interval: 'weekly'
     open-pull-requests-limit: 10
-    target-branch: "develop"
+    target-branch: 'develop'
     allow:
       # Allow only production updates for React and any packages starting "react"
-      - dependency-name: "react*"
+      - dependency-name: 'react*'
         dependency-type: 'production'
     ignore:
       # For AWS SDK, ignore all patch updates
-      - dependency-name: "aws-sdk"
-        update-types: [ "version-update:semver-patch" ]
+      - dependency-name: 'aws-sdk'
+        update-types: ['version-update:semver-patch']
     # Specify labels for npm pull requests
     labels:
-      - "npm"
-      - "dependencies"
+      - 'npm'
+      - 'dependencies'
     versioning-strategy: increase-if-necessary
 
   - package-ecosystem: 'github-actions'
@@ -27,9 +27,9 @@ updates:
     schedule:
       interval: 'monthly'
       day: 'monday'
-      time: "09:00" # UTC time from default
+      time: '09:00' # UTC time from default
       # Use Poland Standard Time
-      timezone: "Poland"
+      timezone: 'Poland'
     open-pull-requests-limit: 10
     reviewers:
       - 'Jozwiaczek'
