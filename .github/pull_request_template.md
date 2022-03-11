@@ -4,7 +4,7 @@
 
 <!-- Give a general overview of the PR or/and link all JIRA tickets here -->
 
-<!-- ## Technical & Architecture Changes -->
+## Technical & Architecture Changes
 <!-- Explain any architecture changes/decisions here, if any-->
 <!-- Number of new packages in package.json -->
 <!-- Link any relevant documents -->
