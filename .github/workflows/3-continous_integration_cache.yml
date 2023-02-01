@@ -22,7 +22,7 @@ jobs:
 
       - name: 'Use cached node_modules'
         id: cache-modules
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3.2.4
         with:
           path: 'node_modules'
           key: ${{ runner.os }}-v${{ matrix.node-version }}-node_modules-${{ hashFiles('yarn.lock', '**/package.json') }}
@@ -33,7 +33,7 @@ jobs:
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
       - name: 'Cache global yarn cache'
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3.2.4
         if: steps.cache-modules.outputs.cache-hit != 'true'
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
@@ -53,7 +53,7 @@ jobs:
         run: yarn prettier
 
       - name: 'Use Eslint Cache Folder'
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3.2.4
         id: eslint-cache-folder
         with:
           path: .eslintcache
