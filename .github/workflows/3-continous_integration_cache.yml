@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: 'Git checkout'
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v4
 
       # Beginning of yarn setup, keep in sync between all workflows
       - name: Use Node.js ${{ matrix.node-version }}
